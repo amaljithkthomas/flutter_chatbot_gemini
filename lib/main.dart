@@ -18,7 +18,7 @@ class GenerativeAiSample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(apiKey);
+    //print(apiKey);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'My chatbot',
