@@ -122,32 +122,40 @@ class _ChatWidgetState extends State<ChatWidget> {
         final content = [
           Content.multi([
             TextPart(_textEditingController.text.trim()),
-            DataPart('image.jpeg', bytes),
+            DataPart('image/jpeg', bytes),
           ])
         ];
         _generatedContent.add((
-          image: Image.memory(bytes),
           text: _textEditingController.text,
+          image: Image.memory(bytes),
           isFromUser: true,
         ));
 
         var response = await _model.generateContent(content);
         var text = response.text;
-        _generatedContent.add((image: null, text: text, isFromUser: false));
+        _generatedContent.add((
+          image: null,
+          text: text,
+          isFromUser: false,
+        ));
         if (text == null) {
-          showErrorMessage('No response from chat bot');
-          return;
+          if (mounted) {
+            showErrorMessage('No response from chat bot');
+            return;
+          }
         } else {
           setState(() {
             _loading = false;
             _scrollDown();
           });
         }
-      } catch (e) {
+      } catch (e, st) {
         showErrorMessage(e.toString());
+
         setState(() {
           _loading = false;
         });
+        print(st);
       } finally {
         _textEditingController.clear();
         setState(() {
